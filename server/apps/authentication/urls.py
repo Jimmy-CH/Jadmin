@@ -1,8 +1,10 @@
-# urls.py (项目根 urls.py 或 app 的 urls.py)
+
 from django.urls import path
-from .views import LoginView
+from .views import LoginView, CaptchaView, LogoutView
 
 urlpatterns = [
-    path('login', LoginView.as_view(), name='login'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('captcha/', CaptchaView.as_view(), name='get_captcha'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]
 
