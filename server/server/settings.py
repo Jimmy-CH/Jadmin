@@ -125,6 +125,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',  # 启用黑名单
     'apps.authentication',
     'apps.users'
 ]
@@ -159,8 +160,9 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'common.jwt_auth.BlacklistJWTAuthentication',
     ),
+    'EXCEPTION_HANDLER': 'common.exception_handler.custom_exception_handler',
 }
 
 # 媒体文件配置
@@ -168,7 +170,7 @@ MEDIA_URL = '/media/'
 if platform.system().lower() == 'windows':
     MEDIA_ROOT = r'D:/media/'
     DB_BACKUP_PATH = r'D:/media/backups/mysql/'
-    LOG_PATH = r'D:/media/logs/'
+    LOG_PATH = BASE_DIR / 'logs'
 else:
     # 项目根目录下的 media/ 文件夹
     MEDIA_ROOT = BASE_DIR / 'media'
@@ -272,7 +274,7 @@ LOGGING = {
             'level': 'INFO' if DEBUG else 'WARNING',
             'propagate': False,
         },
-        'ms': {
+        'jadmin': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': False,
