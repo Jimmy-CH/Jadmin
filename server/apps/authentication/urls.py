@@ -1,10 +1,10 @@
 
 from django.urls import path
-from .views import LoginView, CaptchaView, LogoutView
+from apps.authentication.views import LoginView, CaptchaView, LogoutView
 
 urlpatterns = [
-    path('login/', LoginView.as_view(), name='login'),
-    path('captcha/', CaptchaView.as_view(), name='get_captcha'),
-    path('logout/', LogoutView.as_view(), name='logout'),
+    path('login', LoginView.as_view(), name='login'),
+    path('captcha', CaptchaView.as_view(), name='get_captcha'),
+    path('logout', LogoutView.as_view(), name='logout'),
 ]
 

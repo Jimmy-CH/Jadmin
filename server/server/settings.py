@@ -162,6 +162,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'common.jwt_auth.BlacklistJWTAuthentication',
     ),
+    'EXCEPTION_HANDLER': 'common.exception_handler.custom_exception_handler',
 }
 
 # 媒体文件配置
@@ -273,7 +274,7 @@ LOGGING = {
             'level': 'INFO' if DEBUG else 'WARNING',
             'propagate': False,
         },
-        'ms': {
+        'jadmin': {
             'handlers': ['file', 'console'],
             'level': 'DEBUG' if DEBUG else 'INFO',
             'propagate': False,
