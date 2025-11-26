@@ -60,7 +60,7 @@ class DeptViewSet(viewsets.ModelViewSet):
         })
 
     def partial_update(self, request, *args, **kwargs):
-        # 支持 PATCH（可选）
+        # 支持 PATCH
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
 

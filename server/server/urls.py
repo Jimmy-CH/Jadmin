@@ -26,6 +26,7 @@ api_patterns = [
     path('dept/', include('apps.dept.urls')),
     path('roles/', include('apps.roles.urls')),
     path('menus/', include('apps.menus.urls')),
+    path('dicts/', include('apps.dicts.urls')),
 ]
 
 urlpatterns = [
