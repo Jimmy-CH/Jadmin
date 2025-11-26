@@ -63,28 +63,31 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         profile_data = validated_data.pop('profile', {})
+        first_name = validated_data.get('first_name', '')
+
         user = User.objects.create(
             username=validated_data['username'],
             email=validated_data.get('email', ''),
-            first_name=validated_data.get('first_name', '')
+            first_name=first_name
         )
         user.set_unusable_password()
         user.save()
 
-        # 更新 profile
-        profile = user.profile
+        # 安全创建或获取 Profile
+        profile, created = UserProfile.objects.get_or_create(user=user)
+
+        # 更新普通字段
         for attr, value in profile_data.items():
             if attr not in ['dept', 'roles']:
                 setattr(profile, attr, value)
-        profile.save()
 
-        # 设置外键和多对多关系
+        # 处理外键和多对多
         if 'dept' in profile_data:
             profile.dept = profile_data['dept']
         if 'roles' in profile_data:
             profile.roles.set(profile_data['roles'])
-        profile.save()
 
+        profile.save()
         return user
 
     def update(self, instance, validated_data):
@@ -93,16 +96,19 @@ class UserSerializer(serializers.ModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.save()
 
-        profile = instance.profile
+        # 安全获取或创建 Profile（兼容旧用户）
+        profile, created = UserProfile.objects.get_or_create(user=instance)
+
+        # 更新普通字段
         for attr, value in profile_data.items():
             if attr not in ['dept', 'roles']:
                 setattr(profile, attr, value)
-        profile.save()
 
+        # 处理外键和多对多
         if 'dept' in profile_data:
             profile.dept = profile_data['dept']
         if 'roles' in profile_data:
             profile.roles.set(profile_data['roles'])
-        profile.save()
 
+        profile.save()
         return instance

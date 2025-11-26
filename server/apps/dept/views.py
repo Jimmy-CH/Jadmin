@@ -66,9 +66,9 @@ class DeptViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        # 可选：检查是否有子部门，防止误删
-        # if instance.department_set.exists():
-        #     return Response({"code": "400", "msg": "请先删除子部门", "data": {}}, status=400)
+        # 检查是否有子部门，防止误删
+        if instance.department_set.exists():
+            return Response({"code": "400", "msg": "请先删除子部门", "data": {}}, status=400)
         instance.delete()
         return Response({
             "code": "200",
