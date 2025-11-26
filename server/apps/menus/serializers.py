@@ -24,12 +24,7 @@ class MenuFormSerializer(serializers.ModelSerializer):
         read_only_fields = ['id']
         extra_kwargs = {
             'routeName': {'source': 'route_name'},
-            'routePath': {'source': 'route_path'},
-            'component': {'source': 'component'},
-            'perm': {'source': 'perm'},
-            'visible': {'source': 'visible'},
-            'icon': {'source': 'icon'},
-            'redirect': {'source': 'redirect'},
+            'routePath': {'source': 'route_path'}
         }
 
     def validate_parentId(self, value):
@@ -63,11 +58,6 @@ class MenuTreeSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'routeName': {'source': 'route_name'},
             'routePath': {'source': 'route_path'},
-            'component': {'source': 'component'},
-            'perm': {'source': 'perm'},
-            'visible': {'source': 'visible'},
-            'icon': {'source': 'icon'},
-            'redirect': {'source': 'redirect'},
         }
 
     def get_children(self, obj):
