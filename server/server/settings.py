@@ -127,7 +127,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',  # 启用黑名单
     'apps.authentication',
-    'apps.users'
+    'apps.users',
+    'apps.dept',
+    'apps.roles',
+    'apps.menus',
 ]
 
 MIDDLEWARE = [
@@ -159,6 +162,7 @@ TEMPLATES = [
 ]
 
 REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'common.pagination.CustomPagePagination',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'common.jwt_auth.BlacklistJWTAuthentication',
     ),
@@ -182,7 +186,7 @@ os.makedirs(DB_BACKUP_PATH, exist_ok=True)
 os.makedirs(LOG_PATH, exist_ok=True)
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60 * 24 * 7),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
