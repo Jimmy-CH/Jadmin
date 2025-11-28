@@ -131,6 +131,7 @@ INSTALLED_APPS = [
     'apps.dept',
     'apps.roles',
     'apps.menus',
+    'apps.dicts',
 ]
 
 MIDDLEWARE = [
@@ -167,6 +168,11 @@ REST_FRAMEWORK = {
         'common.jwt_auth.BlacklistJWTAuthentication',
     ),
     'EXCEPTION_HANDLER': 'common.exception_handler.custom_exception_handler',
+    # 全局启用排序过滤器
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',  # 启用排序
+    ],
 }
 
 # 媒体文件配置
