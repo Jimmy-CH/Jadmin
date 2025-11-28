@@ -27,6 +27,8 @@ api_patterns = [
     path('roles/', include('apps.roles.urls')),
     path('menus/', include('apps.menus.urls')),
     path('dicts/', include('apps.dicts.urls')),
+    path('logs/', include('apps.log.urls')),
+    path('notices/', include('apps.notices.urls')),
 ]
 
 urlpatterns = [

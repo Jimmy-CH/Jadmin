@@ -132,6 +132,8 @@ INSTALLED_APPS = [
     'apps.roles',
     'apps.menus',
     'apps.dicts',
+    'apps.notices',
+    'apps.log',
 ]
 
 MIDDLEWARE = [
