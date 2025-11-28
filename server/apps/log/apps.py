@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class DictsConfig(AppConfig):
+class LogConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.dicts'
+    name = 'apps.log'

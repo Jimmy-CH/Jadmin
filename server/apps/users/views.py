@@ -4,6 +4,7 @@ from apps.users.serializers import CurrentUserDTOSerializer, UserSerializer
 from django.contrib.auth.models import User
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from .filters import UserFilter
 
 
@@ -30,7 +31,12 @@ class UserViewSet(viewsets.ModelViewSet):
     - update / partial_update: 更新用户
     - destroy: 删除用户
     """
-    queryset = User.objects.select_related('profile__dept').prefetch_related('profile__roles').all()
+    queryset = (
+        User.objects
+        .select_related('profile__dept')
+        .prefetch_related('profile__roles')
+        .order_by('-id')
+    )
     serializer_class = UserSerializer
     filterset_class = UserFilter
     ordering = ['-id']
@@ -38,6 +44,17 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         # 如有需要可传递额外上下文
         return super().get_serializer_context()
+
+    @action(detail=True, methods=['get'],  url_path='form')
+    def form(self, request, pk=None):
+        """获取用户表单数据（用于编辑）"""
+        user = self.get_object()
+        serializer = UserSerializer(user, context=self.get_serializer_context())
+        return Response({
+            "code": "200",
+            "msg": "success",
+            "data": serializer.data
+        })
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
