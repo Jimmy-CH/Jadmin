@@ -10,7 +10,7 @@ const UserAPI = {
    */
   getInfo() {
     return request<any, UserInfo>({
-      url: `${USER_BASE_URL}/me`,
+      url: `${USER_BASE_URL}/me/`,
       method: "get",
     });
   },
@@ -22,7 +22,7 @@ const UserAPI = {
    */
   getPage(queryParams: UserPageQuery) {
     return request<any, PageResult<UserPageVO[]>>({
-      url: `${USER_BASE_URL}/page`,
+      url: `${USER_BASE_URL}/page/`,
       method: "get",
       params: queryParams,
     });
@@ -36,7 +36,7 @@ const UserAPI = {
    */
   getFormData(userId: string) {
     return request<any, UserForm>({
-      url: `${USER_BASE_URL}/${userId}/form`,
+      url: `${USER_BASE_URL}/${userId}/form/`,
       method: "get",
     });
   },
@@ -62,7 +62,7 @@ const UserAPI = {
    */
   update(id: string, data: UserForm) {
     return request({
-      url: `${USER_BASE_URL}/${id}`,
+      url: `${USER_BASE_URL}/${id}/`,
       method: "put",
       data,
     });
@@ -76,7 +76,7 @@ const UserAPI = {
    */
   resetPassword(id: string, password: string) {
     return request({
-      url: `${USER_BASE_URL}/${id}/password/reset`,
+      url: `${USER_BASE_URL}/${id}/password/reset/`,
       method: "put",
       params: { password },
     });
@@ -89,7 +89,7 @@ const UserAPI = {
    */
   deleteByIds(ids: string) {
     return request({
-      url: `${USER_BASE_URL}/${ids}`,
+      url: `${USER_BASE_URL}/${ids}/`,
       method: "delete",
     });
   },
@@ -97,7 +97,7 @@ const UserAPI = {
   /** 下载用户导入模板 */
   downloadTemplate() {
     return request({
-      url: `${USER_BASE_URL}/template`,
+      url: `${USER_BASE_URL}/template/`,
       method: "get",
       responseType: "blob",
     });
@@ -110,7 +110,7 @@ const UserAPI = {
    */
   export(queryParams: UserPageQuery) {
     return request({
-      url: `${USER_BASE_URL}/export`,
+      url: `${USER_BASE_URL}/export/`,
       method: "get",
       params: queryParams,
       responseType: "blob",
@@ -127,7 +127,7 @@ const UserAPI = {
     const formData = new FormData();
     formData.append("file", file);
     return request<any, ExcelResult>({
-      url: `${USER_BASE_URL}/import`,
+      url: `${USER_BASE_URL}/import/`,
       method: "post",
       params: { deptId },
       data: formData,

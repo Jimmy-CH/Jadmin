@@ -135,7 +135,7 @@ const rememberMe = AuthStorage.getRememberMe();
 
 const loginFormData = ref<LoginFormData>({
   username: "admin",
-  password: "123456",
+  password: "4432chen",
   captchaKey: "",
   captchaCode: "",
   rememberMe,
@@ -178,6 +178,7 @@ function getCaptcha() {
   codeLoading.value = true;
   AuthAPI.getCaptcha()
     .then((data) => {
+      console.log("captcha data:", data);
       loginFormData.value.captchaKey = data.captchaKey;
       captchaBase64.value = data.captchaBase64;
     })

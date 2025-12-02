@@ -47,14 +47,14 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         [env.VITE_APP_BASE_API]: {
           changeOrigin: true,
           // 代理目标地址：https://api.youlai.tech
-          target: env.VITE_APP_API_URL,
+          target: "http://127.0.0.1:8018",
           rewrite: (path: string) => path.replace(new RegExp("^" + env.VITE_APP_BASE_API), ""),
         },
       },
     },
     plugins: [
       vue(),
-      ...(env.VITE_MOCK_DEV_SERVER === "true" ? [mockDevServerPlugin()] : []),
+      // ...(env.VITE_MOCK_DEV_SERVER === "true" ? [mockDevServerPlugin()] : []),
       UnoCSS(),
       // API 自动导入
       AutoImport({

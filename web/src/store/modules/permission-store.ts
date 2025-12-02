@@ -19,6 +19,7 @@ export const usePermissionStore = defineStore("permission", () => {
   async function generateRoutes(): Promise<RouteRecordRaw[]> {
     try {
       const data = await MenuAPI.getRoutes(); // 获取当前登录人的菜单路由
+      console.log("Fetched route data:", data);
       const dynamicRoutes = transformRoutes(data);
 
       routes.value = [...constantRoutes, ...dynamicRoutes];

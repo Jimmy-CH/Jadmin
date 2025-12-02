@@ -11,7 +11,7 @@ const AuthAPI = {
     formData.append("captchaKey", data.captchaKey);
     formData.append("captchaCode", data.captchaCode);
     return request<any, LoginResult>({
-      url: `${AUTH_BASE_URL}/login`,
+      url: `${AUTH_BASE_URL}/login/`,
       method: "post",
       data: formData,
       headers: {
@@ -23,7 +23,7 @@ const AuthAPI = {
   /** 刷新 token 接口*/
   refreshToken(refreshToken: string) {
     return request<any, LoginResult>({
-      url: `${AUTH_BASE_URL}/refresh-token`,
+      url: `${AUTH_BASE_URL}/refresh-token/`,
       method: "post",
       params: { refreshToken },
       headers: {
@@ -35,7 +35,7 @@ const AuthAPI = {
   /** 退出登录接口 */
   logout() {
     return request({
-      url: `${AUTH_BASE_URL}/logout`,
+      url: `${AUTH_BASE_URL}/logout/`,
       method: "delete",
     });
   },
@@ -43,7 +43,7 @@ const AuthAPI = {
   /** 获取验证码接口*/
   getCaptcha() {
     return request<any, CaptchaInfo>({
-      url: `${AUTH_BASE_URL}/captcha`,
+      url: `${AUTH_BASE_URL}/captcha/`,
       method: "get",
     });
   },

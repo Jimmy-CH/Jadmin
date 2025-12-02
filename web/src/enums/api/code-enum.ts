@@ -5,16 +5,16 @@ export const enum ApiCodeEnum {
   /**
    * 成功
    */
-  SUCCESS = "00000",
+  SUCCESS = "200",
   /**
    * 错误
    */
-  ERROR = "B0001",
+  ERROR = "500",
 
   /**
    * 访问令牌无效或过期
    */
-  ACCESS_TOKEN_INVALID = "A0230",
+  ACCESS_TOKEN_INVALID = "401",
 
   /**
    * 刷新令牌无效或过期
