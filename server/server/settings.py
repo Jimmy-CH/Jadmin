@@ -125,6 +125,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'rest_framework_simplejwt.token_blacklist',  # 启用黑名单
     'apps.authentication',
     'apps.users',
@@ -134,6 +135,7 @@ INSTALLED_APPS = [
     'apps.dicts',
     'apps.notices',
     'apps.log',
+    'apps.faults',
 ]
 
 MIDDLEWARE = [
