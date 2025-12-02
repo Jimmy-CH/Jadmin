@@ -29,6 +29,7 @@ api_patterns = [
     path('dicts/', include('apps.dicts.urls')),
     path('logs/', include('apps.log.urls')),
     path('notices/', include('apps.notices.urls')),
+    path('faults/', include('apps.faults.urls')),
 ]
 
 urlpatterns = [

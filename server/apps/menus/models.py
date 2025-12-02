@@ -4,10 +4,10 @@ from django.db import models
 
 class Menu(models.Model):
     MENU_TYPE_CHOICES = (
-        (1, '菜单'),  # 对应接口 type=1
-        (2, '目录'),  # 对应接口 type=2
-        (3, '外链'),  # 新增
-        (4, '按钮'),  # 对应接口 type=4
+        ("MENU", '菜单'),
+        ("CATALOG", '目录'),
+        ("LINK", '外链'),
+        ("BUTTON", '按钮'),
     )
 
     name = models.CharField(max_length=100, verbose_name="菜单名称")
@@ -18,7 +18,7 @@ class Menu(models.Model):
         on_delete=models.CASCADE,
         verbose_name="父菜单"
     )
-    type = models.IntegerField(choices=MENU_TYPE_CHOICES, verbose_name="菜单类型")
+    type = models.CharField(max_length=20, default="MENU", choices=MENU_TYPE_CHOICES, verbose_name="菜单类型")
     route_name = models.CharField(max_length=100, blank=True, verbose_name="路由名称")
     route_path = models.CharField(max_length=200, blank=True, verbose_name="路由路径")
     component = models.CharField(max_length=200, blank=True, verbose_name="组件路径")

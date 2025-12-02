@@ -3,64 +3,79 @@ from rest_framework import serializers
 from .models import Menu
 
 
-class KeyValueSerializer(serializers.Serializer):
-    key = serializers.CharField()
-    value = serializers.CharField()
-
-
-class MenuFormSerializer(serializers.ModelSerializer):
-    parentId = serializers.IntegerField(source='parent_id', required=False, allow_null=True)
-    keepAlive = serializers.IntegerField(source='keep_alive', required=False)
-    alwaysShow = serializers.IntegerField(source='always_show', required=False)
-    params = KeyValueSerializer(many=True, required=False)
-
-    class Meta:
-        model = Menu
-        fields = [
-            'id', 'parentId', 'name', 'type', 'routeName', 'routePath',
-            'component', 'perm', 'visible', 'sort', 'icon', 'redirect',
-            'keepAlive', 'alwaysShow', 'params'
-        ]
-        read_only_fields = ['id']
-        extra_kwargs = {
-            'routeName': {'source': 'route_name'},
-            'routePath': {'source': 'route_path'}
-        }
-
-    def validate_parentId(self, value):
-        if value is not None and not Menu.objects.filter(id=value).exists():
-            raise serializers.ValidationError("父菜单不存在")
-        return value
-
-    def to_internal_value(self, data):
-        # 先正常解析
-        validated_data = super().to_internal_value(data)
-        # 单独处理 params：从 list[dict] 转为存储格式
-        params = data.get('params')
-        if params is not None:
-            validated_data['params'] = params  # JSONField 直接存 list of dict
-        return validated_data
-
-
 class MenuTreeSerializer(serializers.ModelSerializer):
-    parentId = serializers.IntegerField(source='parent_id', read_only=True)
-    keepAlive = serializers.IntegerField(source='keep_alive', read_only=True)
-    alwaysShow = serializers.IntegerField(source='always_show', read_only=True)
+    """用于 /menus 和 /menus/options 的递归序列化"""
     children = serializers.SerializerMethodField()
 
     class Meta:
         model = Menu
         fields = [
-            'id', 'parentId', 'name', 'type', 'routeName', 'routePath',
+            'id', 'name', 'parent', 'type', 'route_name', 'route_path',
             'component', 'perm', 'visible', 'sort', 'icon', 'redirect',
-            'keepAlive', 'alwaysShow', 'children'
+            'keep_alive', 'always_show', 'params', 'children'
         ]
-        extra_kwargs = {
-            'routeName': {'source': 'route_name'},
-            'routePath': {'source': 'route_path'},
-        }
 
     def get_children(self, obj):
-        children = Menu.objects.filter(parent=obj).order_by('sort')
-        return MenuTreeSerializer(children, many=True, context=self.context).data
+        if hasattr(obj, 'children'):
+            return MenuTreeSerializer(obj.children, many=True, context=self.context).data
+        return []
+
+
+class MenuRouteSerializer(serializers.ModelSerializer):
+    """专用于 /menus/routes，输出前端路由所需结构"""
+    class Meta:
+        model = Menu
+        fields = []  # 不直接使用字段，手动构建
+
+    def to_representation(self, instance):
+        meta = {
+            "title": instance.name,
+            "icon": instance.icon or "",
+            "hidden": not bool(instance.visible),
+            "keepAlive": bool(instance.keep_alive),
+            "alwaysShow": bool(instance.always_show),
+            "params": instance.params or None,
+        }
+
+        route = {
+            "path": instance.route_path,
+            "name": instance.route_name or instance.name,
+            "meta": meta,
+        }
+
+        if instance.component:
+            route["component"] = instance.component
+
+        if instance.redirect:
+            route["redirect"] = instance.redirect
+
+        if hasattr(instance, 'children') and instance.children:
+            route["children"] = [
+                self.__class__(child).data for child in instance.children
+            ]
+
+        return route
+
+
+class MenuOptionSerializer(serializers.ModelSerializer):
+    """用于 /menus/options 下拉树"""
+    value = serializers.IntegerField(source='id')
+    label = serializers.CharField(source='name')
+    children = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Menu
+        fields = ['value', 'label', 'children']
+
+    def get_children(self, obj):
+        if hasattr(obj, 'children'):
+            return MenuOptionSerializer(obj.children, many=True, context=self.context).data
+        return []
+
+
+class MenuFormSerializer(serializers.ModelSerializer):
+    """用于表单编辑/新增"""
+    class Meta:
+        model = Menu
+        fields = '__all__'
 

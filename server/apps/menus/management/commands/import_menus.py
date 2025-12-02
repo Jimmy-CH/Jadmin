@@ -431,7 +431,7 @@ class Command(BaseCommand):
         def create_menu_items(items, parent=None):
             nonlocal created_count
             for item in items:
-                menu_type = TYPE_MAP.get(item["type"], 1)
+                menu_type = item["type"]
                 params = item.get("params", None)
 
                 menu, created = Menu.objects.update_or_create(
